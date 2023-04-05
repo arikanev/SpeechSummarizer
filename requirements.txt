@@ -1,0 +1,9 @@
+SpeechRecognition
+PyAudio
+google-cloud-speech
+tk
+bs4
+transformers
+openai
+nltk
+sumy
