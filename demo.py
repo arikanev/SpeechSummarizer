@@ -122,13 +122,15 @@ def choose_link():
 
 def record_to_text():
 
-    r=sr.Recognizer()
+    global text_to_sum
 
-    r.non_speaking_duration = 2
+    r = sr.Recognizer()
 
-    r.pause_threshold = 2
+    r.non_speaking_duration = 1
 
-    m=sr.Microphone()
+    r.pause_threshold = 1
+
+    m = sr.Microphone()
 
     GOOGLE_CLOUD_SPEECH_CREDENTIALS = "macro-atom-182501-f4b1f0237c28.json"
 
@@ -136,15 +138,11 @@ def record_to_text():
         print("Please state what you intend to be summarized.")
         r.adjust_for_ambient_noise(source)
         audio = r.listen(source)
-        try:
-            spoken_answer = r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS).lower().strip()
-            # spoken_answer = r.recognize_google(audio).lower()
-            # spoken_answer = r.recognize_sphinx(audio, keyword_entries=[(prompt[idx], 0.8)]).lower().strip()
-        except sr.UnknownValueError:
-            spoken_answer = ""
-
-    return spoken_answer
-
+        spoken_answer = r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS).lower().strip()
+        print("Text to summarize:", spoken_answer)
+        text_to_sum = spoken_answer
+        root.quit()
+    return 
 
 
 global root
@@ -179,9 +177,10 @@ link_box.pack()
 link_button = tk.Button(root, text="Choose link", command=choose_link)
 link_button.pack()
 
+record_button = tk.Button(root, text="Record", command=record_to_text)
+record_button.pack()
+
 root.mainloop()
+print(empirical_comparison(text_to_sum))
 
 
-# print(empirical_comparison(text_to_sum))
-
-print(empirical_comparison(record_to_text()))
